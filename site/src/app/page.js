@@ -1,11 +1,11 @@
 import Image from "next/image";
-import data from '../../../data/2024.json';
+import data from '../../../data/data.json';
+import Calendar from "@/components/Calendar";
 
 
 export default function Home() {
   var month = "February";
   var year = 2024;
-  console.log(JSON.stringify(data));
   return (
     // <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <main id="main">
@@ -23,13 +23,10 @@ export default function Home() {
           <div class="dayName summaryWidth">SUMMARY</div>
         </div>
       </div>
-      <div id="scrollContainer">
-        {/* Load all data from files */}
-        <div>
-          {/* <div class="calendarWeekContainer" data-date="2024-01-22"></div> */}
-          
-        </div>
-      </div>
+
+
+      <Calendar />
+
     </main>
   );
 }
