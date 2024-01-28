@@ -43,3 +43,59 @@ body {
   padding-left: 10px;
   font-size: 0.9rem;
 }
+
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, 12.14%) 15%;
+}
+
+.dayContainer {
+  display: block;
+  min-height: 400px;
+}
+
+.dayHeader {
+  background: #eee;
+  padding-left: 10px;
+}
+
+.workoutContainer{
+  border-right: 1px solid #ddd;
+  height: 100%;
+}
+
+.workout {
+  margin: 8px;
+  padding: 4px 6px;
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  max-height: 200px;
+  border-radius: 4px;
+  border: 1px solid #eee;
+}
+
+.workout:hover{
+  cursor: pointer;
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.5), 0 1px 1px 0 rgba(0,0,0,.4), 0 1px 3px 0 rgba(0,0,0,.34);
+}
+
+.workoutDuration {
+  font-size: small;
+  font-weight: 600;
+}
+
+.workoutDescription{
+  font-size: small;
+  text-overflow: ellipsis;
+  /* overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; */
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Set the number of lines before ellipsis */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.summary {
+  padding: .8rem;
+  border-bottom: 1px solid #ddd;
+}

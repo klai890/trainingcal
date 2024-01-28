@@ -84,3 +84,9 @@ export function inDateArr(target, dateArr){
 export function dateToStr(d){
     return (d.getMonth() + 1) + "/" + d.getDate() + "/" + JSON.stringify(d.getFullYear());
 }
+
+export function capitalize(str) {
+    str = str.toLowerCase();
+    str = str.charAt(0).toUpperCase() + str.substring(1);
+    return str;
+}

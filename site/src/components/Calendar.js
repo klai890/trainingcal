@@ -1,7 +1,6 @@
 import data from '../../../data/data.json'
-import Day from './Day';
 import Summary from './Summary'
-import {addDays, sortDates, getMondays, inDateArr, dateToStr} from '@/utilities'
+import {addDays, sortDates, getMondays, inDateArr, dateToStr, capitalize} from '@/utilities'
 
 export default function Calendar(){
     // Example week object:
@@ -54,31 +53,56 @@ export default function Calendar(){
     var endDate = new Date(addDays(new Date(), 70));
     var mondays = getMondays(endDate, earliestDate);
 
-    var week = [];
     
     // useState to see when to render popup for editing workout, adding workout
-
+    
     return (
-    <>
+        <>
+        <div id="main">
+            <div id="header">
+                February 2024
+                <div id="weekHeader">
+                    <div class="dayName dayWidth">MON</div>
+                    <div class="dayName dayWidth">TUE</div>
+                    <div class="dayName dayWidth">WED</div>
+                    <div class="dayName dayWidth">THU</div>
+                    <div class="dayName dayWidth">FRI</div>
+                    <div class="dayName dayWidth">SAT</div>
+                    <div class="dayName dayWidth">SUN</div>
+                    <div class="dayName summaryWidth">SUMMARY</div>
+                 </div>
+            </div>
+        </div>
         <div class="calendar">
             {mondays.map(d => {
                 d = new Date(d); 
+                
+                var week = [];
+
+                // Loop thru Dates from date to the Sunday after (for loop, i < 7, add 1 day each time)
+                for (var i = 0; i < 7; i++) {
+                    week.push(new Date(addDays(d, i)));
+                }
+
 
                 // a. If date not in .JSON file: 
                 
                 if (!inDateArr(d, workoutDates)) {
-                    
-                    // Loop thru Dates from date to the Sunday after (for loop, i < 7, add 1 day each time)
-                    for (var i = 0; i < 7; i++) {
-                        week.push(new Date(addDays(d, i)));
-                    }
                     
                     // For each day, generate a Day component with date=d and workouts=[]
                     // Then, generate Summary component, with totalTime = 0, bikeTime = 0, runTime = 0, swimTime = 0, otherTime = 0
                     return (
                         <div class="week">
                             {week.map( day => (
-                                    <Day date={day} workouts={[]} />
+                                    // <Day date={day} workouts={[]} />
+                                    <div class="dayContainer">
+                                        <div class="dayHeader">
+                                            {day.getDate()}
+                                        </div>
+
+                                        <div class="workoutContainer">
+                                        </div>
+                                    </div>
                             ))}
                             <Summary workouts={[]} />
                         </div>
@@ -100,7 +124,6 @@ export default function Calendar(){
                     // Grab workouts for that day: workouts = jsonarr[JSON.stringify(d.getDay())]
                     for (var i = 0; i < 7; i++) {
                         var day = new Date(addDays(d, i));
-                        week.push(day);
                         var dayStr = JSON.stringify(day.getDay());
                         
                         // Check if day has workouts. If not, set the workouts array to []
@@ -122,23 +145,31 @@ export default function Calendar(){
                             {week.map( day => {
                                 var dayStr = JSON.stringify(day.getDay());
                                 var dayWorkouts = workouts[dayStr];
+
                                 return (
                                     <>
                                         {/* <Day date={day} workouts={workouts[dayStr]} /> */}
-                                        <div class="dayHeader">
-                                            {day.getDate()}
+                                        <div class="dayContainer">
+                                            <div class="dayHeader">
+                                                {day.getDate()}
+                                            </div>
+                                           
+                                            <div class="workoutContainer">
+                                                {dayWorkouts.map( (workout) => {
+                                                    return(
+                                                        <div class="workout">
+                                                            {/* Render appropriate logo based on type */}
+                                                            <p class="workoutTitle">{workout.title}</p>
+                                                            <p class="workoutDuration"> {capitalize(workout.type)} / {workout.duration}</p>
+                                                            <p class="workoutDescription">{workout.description}</p>
+                                                        </div>                                        
+                                                    )
+                                                })}
+                                                {/* <AddWorkout /> */}
+                                            </div>
+
                                         </div>
 
-                                        <div class="workoutContainer">
-                                            {dayWorkouts.map( (workout) => {
-                                                return(
-                                                    <div class="workout">
-                                                        {/* Render appropriate logo based on type */}
-                                                    </div>                                        
-                                                )
-                                            })}
-                                            {/* <AddWorkout /> */}
-                                        </div>
                                     </>
                                 )
                             })}
