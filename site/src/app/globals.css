@@ -99,3 +99,34 @@ body {
   padding: .8rem;
   border-bottom: 1px solid #ddd;
 }
+
+.duration{
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  font-size: 14px;
+}
+
+#editWorkout{
+  height: 700px;
+  width: 600px;
+  border: 1px solid black;
+  position: fixed;
+  right: 400px;
+  border-radius: 10px;
+  padding: 2rem;
+}
+
+.exitBtn {
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+  padding: 0.5rem 1rem;
+  font-size: large;
+  border-radius: 50px;
+}
+
+textarea.modifyDescription {
+  min-height: 200px;
+  min-width: 100%;
+}

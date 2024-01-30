@@ -1,5 +1,12 @@
+import {numHours, remainingMins} from '../utilities';
 
 export default function Summary(workouts){
+
+    function formatTime(duration){
+        var hours = numHours(duration);
+        var mins = remainingMins(duration);
+        return hours + ":" + mins;
+    }
 
     // 1. Calculate total durations by type of workout
     workouts = workouts['workouts']
@@ -16,7 +23,7 @@ export default function Summary(workouts){
                 case 'swim':
                     swimTime += workout.duration;
                     break;
-                case 'bike':
+                case 'ride':
                     bikeTime += workout.duration;
                     break;
                 case 'strength': 
@@ -36,12 +43,32 @@ export default function Summary(workouts){
 
     return (
         <div class="summary">
-            <p>Total Duration {totalTime}</p>
-            <p>Swim Duration {swimTime}</p>
-            <p>Bike Duration {bikeTime}</p>
-            <p>Run Duration {runTime}</p>
-            <p>Strength Duration {strengthTime}</p>
-            <p>Other Duration {otherTime}</p>
+            <div class="duration">
+                <p>Total Duration</p>
+                <p>{formatTime(totalTime)}</p>
+            </div>
+
+            <div class="duration">
+                <p>Swim Duration</p>
+                <p>{formatTime(swimTime)}</p>
+            </div>
+            <div class="duration">
+                <p>Bike Duration</p>
+                <p>{formatTime(bikeTime)}</p>
+            </div>
+            <div class="duration">
+                <p>Run Duration</p>
+                <p>{formatTime(runTime)}</p>
+            </div>
+            <div class="duration">
+                <p>Strength Duration</p>
+                <p>{formatTime(strengthTime)}</p>
+            </div>
+            <div class="duration">
+                <p>Other Duration</p>
+                <p>{formatTime(otherTime)}</p>
+            </div>
+
         </div>
     )
 }

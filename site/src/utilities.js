@@ -1,4 +1,6 @@
 // A file containing some useful helper functions.
+import data from '../../data/data.json'
+
 
 /**
  * @param Date d, int i: d is the day to add i days to
@@ -85,8 +87,33 @@ export function dateToStr(d){
     return (d.getMonth() + 1) + "/" + d.getDate() + "/" + JSON.stringify(d.getFullYear());
 }
 
+/**
+ * capitalize(): Returns string str with the first letter uppercase and the rest lowercase
+ * @param {*} str 
+ * @returns str, but modified as detailed above
+ * Precondition: String is one word
+ */
 export function capitalize(str) {
     str = str.toLowerCase();
     str = str.charAt(0).toUpperCase() + str.substring(1);
     return str;
+}
+
+/**
+ * numHours(): Returns the largest amount of hours within mins minutes.
+ * @param {*} mins 
+ * @returns largest number of hours that fit into the amount of minutes
+ */
+export function numHours(mins){
+    return mins / 60 - ((mins / 60) % 1);
+}
+
+/**
+ * remainingMins(): returns the number of minutes remaining after all hours retrieved
+ * ex: remainingMins(345) = 45, because 345mins = 5hr, 45min
+ * @param {*} mins 
+ * @returns minutes remaining after hours accounted for
+ */
+export function remainingMins(mins){
+    return  ((mins / 60) % 1) * 60;
 }

@@ -1,47 +1,11 @@
+"use client";
 import data from '../../../data/data.json'
 import Summary from './Summary'
 import {addDays, sortDates, getMondays, inDateArr, dateToStr, capitalize} from '@/utilities'
+import { useState } from 'react';
+
 
 export default function Calendar(){
-    // Example week object:
-    // {
-    //     "0": [
-    //         {
-    //             "type": "run",
-    //             "duration": 30,
-    //             "title": "Easy Run",
-    //             "description": ""
-    //         }
-    //     ],
-    //     "1": [
-    //         {
-    //             "type": "swim",
-    //             "duration": 90,
-    //             "title": "Swim",
-    //             "description": ""
-    //         }
-    //     ],
-    // }
-
-    // 1. Load all data from .JSON files
-    // 2. Collect all dates into an array and determine which is the earliest date. Store into earliestDate.
-    // 3. Generate an array of Dates, dates, which span from earliestDate to 10 weeks from today's date
-    // 4. Loop thru arrDates (all the Mondays):
-        // a. If date not in .JSON file: 
-        //      Loop thru Dates from date to the Sunday after (for loop, i < 7, add 1 day each time)
-        //      For each day, generate a Day component with date=d and workouts=[]
-        //      Then, generate Summary component, with totalTime = 0, bikeTime = 0, runTime = 0, swimTime = 0, otherTime = 0
-
-        // b. If date in .JSON file: 
-        //      Loop thru Dates from date to the Sunday after
-        //      Initialize runTime, swimTime, bikeTime, strengthTime, otherTime
-        //      For each day
-        //          Grab workouts for that day: workouts = jsonarr[JSON.stringify(d.getDay())]
-        //          Sum workouts by type: types are run, swim, bike, strength, add to vars runTime, swimTime, bikeTime, strengthTime, and otherTime
-        //          Generate a Day component with date=d, workouts = workouts
-        //      totalTime = runTime + swimTime + bikeTime + strengthTime + otherTime
-        //      Then, generate a Summary component, with totalTime = totalTime, runTime = runTime, bikeTime = bikeTime,  swimTime = swimTime, otherTime = otherTime
-
     
     // 2. Collect all dates into an array and determine which is the earliest date. Store into earliestDate.
     var dateStrings = Object.keys(data);
@@ -52,10 +16,12 @@ export default function Calendar(){
     // 3. Generate an array of Dates, mondays, which span from earliestDate to 10 weeks from today's date
     var endDate = new Date(addDays(new Date(), 70));
     var mondays = getMondays(endDate, earliestDate);
-
     
     // useState to see when to render popup for editing workout, adding workout
-    
+    const [workoutId, setWorkoutId] = useState(-1);
+    const [workout, setWorkout] = useState();
+    const [addWorkout, setAddWorkout] = useState(false);
+
     return (
         <>
         <div id="main">
@@ -73,6 +39,31 @@ export default function Calendar(){
                  </div>
             </div>
         </div>
+
+        {workoutId != -1 ? (
+            // Edit workout
+            <div id="editWorkout">
+                {/* grab data from file */}
+                <input class="workoutTitle" value={workout.title} />
+                <div>{capitalize(workout.type)}</div>
+                <input class="workoutDuration" value={workout.duration} />
+                <textarea class="modifyDescription" value={workout.description} />
+
+                {/* Exit Button */}
+                <button onClick={() => setWorkoutId(-1)} class="exitBtn">X</button>
+            </div>
+        ) : addWorkout ? (
+            <>
+                <div id="editWorkout">
+                    <div>
+                        Type:
+                    </div>
+                    {/* Exit Button */}
+                    <button onClick={() => setAddWorkout(false)} class="exitBtn">X</button>
+                </div>
+            </>
+        ) 
+        :(
         <div class="calendar">
             {mondays.map(d => {
                 d = new Date(d); 
@@ -149,23 +140,30 @@ export default function Calendar(){
                                 return (
                                     <>
                                         {/* <Day date={day} workouts={workouts[dayStr]} /> */}
-                                        <div class="dayContainer">
+                                        <div class="dayContainer" key={day.getUTCMilliseconds()}>
                                             <div class="dayHeader">
                                                 {day.getDate()}
                                             </div>
                                            
                                             <div class="workoutContainer">
+                                                {/* Should be able to edit title/description/time and delete each workout */}
+                                                {/* On click on workout class, should show EditWorkout component w correct data */}
+
+                                                {/* each workout has an ID, add it to the div.workout */}
+                                                {/* <EditWorkout {id, isNew} /> where isNew is true if we are adding a workout */}
+                                                {/* If adding a new workout, id = -1; if not, id = workout.id */}
+                                                {/* EditWorkout will then retrieve the data for that particular workout and display it. */}
                                                 {dayWorkouts.map( (workout) => {
                                                     return(
-                                                        <div class="workout">
-                                                            {/* Render appropriate logo based on type */}
+                                                        <div class="workout" key={workout.id} onClick={() => {setWorkoutId(workout.id); setWorkout(workout)}} >
                                                             <p class="workoutTitle">{workout.title}</p>
                                                             <p class="workoutDuration"> {capitalize(workout.type)} / {workout.duration}</p>
                                                             <p class="workoutDescription">{workout.description}</p>
                                                         </div>                                        
                                                     )
                                                 })}
-                                                {/* <AddWorkout /> */}
+
+                                                <button onClick={() => setAddWorkout(true)}>Add Workout</button>
                                             </div>
 
                                         </div>
@@ -178,6 +176,6 @@ export default function Calendar(){
                     )
                 }
             })}
-        </div>
+        </div>)}
     </>)
 }
