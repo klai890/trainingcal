@@ -116,9 +116,12 @@ body {
   padding: 2rem;
 }
 
+button {
+  display: block;
+}
+
 .exitBtn {
   position: absolute;
-  display: block;
   top: 0;
   right: 0;
   padding: 0.5rem 1rem;
@@ -129,4 +132,30 @@ body {
 textarea.modifyDescription {
   min-height: 200px;
   min-width: 100%;
+}
+
+.workoutTitleInput {
+  font-size: large;
+  font-weight: bold;
+}
+
+#editWorkout input, #editWorkout textarea{
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 2px;
+  width: 100%;
+}
+
+#editWorkout input:hover, #editWorkout textarea:hover{
+  border: 1px solid blue;
+}
+
+.btnContainer {
+  display: flex;
+  padding: 1rem;
+  gap: 2rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: blue;
 }

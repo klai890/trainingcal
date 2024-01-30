@@ -3,6 +3,8 @@ import data from '../../../data/data.json'
 import Summary from './Summary'
 import {addDays, sortDates, getMondays, inDateArr, dateToStr, capitalize} from '@/utilities'
 import { useState } from 'react';
+import EditWorkout from './EditWorkout';
+import AddWorkout from './AddWorkout';
 
 
 export default function Calendar(){
@@ -43,11 +45,7 @@ export default function Calendar(){
         {workoutId != -1 ? (
             // Edit workout
             <div id="editWorkout">
-                {/* grab data from file */}
-                <input class="workoutTitle" value={workout.title} />
-                <div>{capitalize(workout.type)}</div>
-                <input class="workoutDuration" value={workout.duration} />
-                <textarea class="modifyDescription" value={workout.description} />
+                <EditWorkout workout={workout}/>
 
                 {/* Exit Button */}
                 <button onClick={() => setWorkoutId(-1)} class="exitBtn">X</button>
@@ -55,9 +53,7 @@ export default function Calendar(){
         ) : addWorkout ? (
             <>
                 <div id="editWorkout">
-                    <div>
-                        Type:
-                    </div>
+                    <AddWorkout />
                     {/* Exit Button */}
                     <button onClick={() => setAddWorkout(false)} class="exitBtn">X</button>
                 </div>
