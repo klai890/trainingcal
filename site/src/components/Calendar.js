@@ -23,6 +23,7 @@ export default function Calendar(){
     const [workoutId, setWorkoutId] = useState(-1);
     const [workout, setWorkout] = useState();
     const [addWorkout, setAddWorkout] = useState(false);
+    const [date, setDate] = useState(new Date());
 
     return (
         <>
@@ -53,7 +54,7 @@ export default function Calendar(){
         ) : addWorkout ? (
             <>
                 <div id="editWorkout">
-                    <AddWorkout />
+                    <AddWorkout date={date} />
                     {/* Exit Button */}
                     <button onClick={() => setAddWorkout(false)} class="exitBtn">X</button>
                 </div>
@@ -159,7 +160,7 @@ export default function Calendar(){
                                                     )
                                                 })}
 
-                                                <button onClick={() => setAddWorkout(true)}>Add Workout</button>
+                                                <button onClick={() => {setAddWorkout(true); setDate(day)}} id="addWorkoutBtn">Add Workout</button>
                                             </div>
 
                                         </div>

@@ -73,7 +73,15 @@ body {
   border: 1px solid #eee;
 }
 
-.workout:hover{
+#addWorkoutBtn {
+  padding: 4px 6px;
+  text-align: center;
+  align-self: center;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.workout:hover, #addWorkoutBtn:hover{
   cursor: pointer;
   box-shadow: 0 2px 1px -1px rgba(0,0,0,.5), 0 1px 1px 0 rgba(0,0,0,.4), 0 1px 3px 0 rgba(0,0,0,.34);
 }
@@ -146,16 +154,30 @@ textarea.modifyDescription {
   width: 100%;
 }
 
+#editWorkout b {
+  padding: 2px;
+}
+
 #editWorkout input:hover, #editWorkout textarea:hover{
   border: 1px solid blue;
 }
 
-.btnContainer {
+#btnContainer {
   display: flex;
   padding: 1rem;
   gap: 2rem;
   position: absolute;
   bottom: 0;
   right: 0;
+  color: blue;
+}
+
+.typeContainer{
+  display: flex;
+  padding: .5rem 0;
+  gap: 2rem;
+}
+
+#selectedType {
   color: blue;
 }

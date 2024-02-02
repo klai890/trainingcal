@@ -1,6 +1,6 @@
 // A file containing some useful helper functions.
 import data from '../../data/data.json'
-
+// export const workoutTypes = ['run', 'ride', 'swim', 'strength', 'other'];
 
 /**
  * @param Date d, int i: d is the day to add i days to
@@ -116,4 +116,70 @@ export function numHours(mins){
  */
 export function remainingMins(mins){
     return  ((mins / 60) % 1) * 60;
+}
+
+
+/**
+ * For a workout to be added on Date date, generates an ID of format %m%d%yy%dayInt%workoutNum
+ * Ex: if its the second workout of tuesday (2) of week 1/29/24, id is 1292421 (date part: 12924 the prev mon),
+ * (2) is tuesday, (1) is the second workout
+ * @param {*} date Date workout is added to
+ * @returns workout ID For the workout to be added
+ */
+function generateWorkoutId(date){
+    var mon = prevMon(date);
+    var datePart = (mon.getMonth() + 1) + "" +  mon.getDate() + "" + JSON.stringify(mon.getFullYear()).substring(2);
+    var day = date.getDay() + "";
+    var workoutNum = data[dateToStr(mon)][day].length + "";
+    return datePart + day + workoutNum;
+}
+
+/**
+ * Formats the workout data to add to the master data object in data.json
+ * @param {*} type of workout (either 'swim', 'run, 'ride', 'other', 'strength)
+ * @param {*} title of workout
+ * @param {*} duration of workout
+ * @param {*} description of workout
+ * @param {*} date of workout
+ */
+export function createWorkout(type, title, duration, description, date) {
+    console.log(type);
+    console.log(title);
+    console.log(description);
+    
+    // Corresponding Monday:
+    var mon = dateToStr(prevMon(date));
+    var day = date.getDay() + "";
+    var id = generateWorkoutId(date);
+
+    // console.log(data[mon][day])
+    console.log(id);
+    data[mon][day].push({
+        "id": id,
+        "type": type,
+        "duration": duration,
+        "title": title,
+        "description": description
+    })
+
+    console.log(data[mon])
+}
+
+/**
+ * Deletes workout of ID id
+ * @param {*} id of workout to delete
+ */
+export function deleteWorkout(id) {
+
+}
+
+/**
+ * Modifies workout of ID id
+ * @param {*} title (maybe new title) of workout
+ * @param {*} duration (maybe new duration)
+ * @param {*} description (maybe new description)
+ * @param {*} id of workout
+ */
+export function modifyWorkout(title, duration, description, id){
+
 }
