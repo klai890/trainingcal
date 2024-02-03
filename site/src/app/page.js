@@ -1,5 +1,4 @@
 import Image from "next/image";
-import data from '../../../data/data.json';
 import Calendar from "@/components/Calendar";
 
 

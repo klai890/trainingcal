@@ -1,5 +1,5 @@
 "use client";
-import data from '../../../data/data.json'
+import data from '../../../data/data2.json'
 import Summary from './Summary'
 import {addDays, sortDates, getMondays, inDateArr, dateToStr, capitalize} from '@/utilities'
 import { useState } from 'react';
@@ -89,6 +89,7 @@ export default function Calendar(){
                                         </div>
 
                                         <div class="workoutContainer">
+                                            <button onClick={() => {setAddWorkout(true); setDate(day)}} id="addWorkoutBtn">Add Workout</button>
                                         </div>
                                     </div>
                             ))}

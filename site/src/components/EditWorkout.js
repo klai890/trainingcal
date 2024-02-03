@@ -1,5 +1,6 @@
 import { capitalize } from "@/utilities"
 import { deleteWorkout, modifyWorkout } from '@/utilities'
+import { useState } from "react";
 
 export default function EditWorkout({workout}) {
 

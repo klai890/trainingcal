@@ -5,7 +5,12 @@ export default function Summary(workouts){
     function formatTime(duration){
         var hours = numHours(duration);
         var mins = remainingMins(duration);
-        return hours + ":" + mins;
+        var prepend = ""
+
+        if (mins < 10) {
+            prepend = "0"
+        }
+        return hours + ":" + prepend + mins;
     }
 
     // 1. Calculate total durations by type of workout

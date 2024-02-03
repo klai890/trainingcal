@@ -1,6 +1,7 @@
 // A file containing some useful helper functions.
-import data from '../../data/data.json'
+import data from '../../data/data2.json'
 // export const workoutTypes = ['run', 'ride', 'swim', 'strength', 'other'];
+
 
 /**
  * @param Date d, int i: d is the day to add i days to
@@ -28,6 +29,9 @@ export function sortDates(a, b) {
 export function prevMon(date) {    
 
     var day = date.getDay()
+    if (day == 0) {
+        day = 7;
+    }
     var mon = new Date(date.getTime());
 
     // TODO: small bug – if it's monday but before 11:59pm, prevMon is actually AFTER date.
@@ -105,7 +109,8 @@ export function capitalize(str) {
  * @returns largest number of hours that fit into the amount of minutes
  */
 export function numHours(mins){
-    return mins / 60 - ((mins / 60) % 1);
+    var hr = Math.floor(mins / 60);
+    return hr;
 }
 
 /**
@@ -115,7 +120,7 @@ export function numHours(mins){
  * @returns minutes remaining after hours accounted for
  */
 export function remainingMins(mins){
-    return  ((mins / 60) % 1) * 60;
+    return  Math.floor(((mins / 60) % 1) * 60);
 }
 
 
@@ -123,14 +128,32 @@ export function remainingMins(mins){
  * For a workout to be added on Date date, generates an ID of format %m%d%yy%dayInt%workoutNum
  * Ex: if its the second workout of tuesday (2) of week 1/29/24, id is 1292421 (date part: 12924 the prev mon),
  * (2) is tuesday, (1) is the second workout
+ * note: prepending a 0 to the day of month if it is less than 10 so it is always 2 digits.
  * @param {*} date Date workout is added to
  * @returns workout ID For the workout to be added
  */
 function generateWorkoutId(date){
     var mon = prevMon(date);
-    var datePart = (mon.getMonth() + 1) + "" +  mon.getDate() + "" + JSON.stringify(mon.getFullYear()).substring(2);
+    var numberdate = mon.getDate();
+    if (mon.getDate() < 10) {
+        numberdate = "0" + mon.getDate();
+    }
+    var datePart = (mon.getMonth() + 1) + "" +  numberdate + "" + JSON.stringify(mon.getFullYear()).substring(2);
     var day = date.getDay() + "";
-    var workoutNum = data[dateToStr(mon)][day].length + "";
+    var workoutNum;
+
+    if (date.hasOwnProperty(dateToStr(mon))){
+        if (date[mon].hasOwnProperty(day)) {
+            workoutNum = data[dateToStr(mon)][day].length;
+        }
+        else {
+            workoutNum = "0"
+        }
+    }
+    else {
+        workoutNum = "0";
+    }
+
     return datePart + day + workoutNum;
 }
 
@@ -142,7 +165,7 @@ function generateWorkoutId(date){
  * @param {*} description of workout
  * @param {*} date of workout
  */
-export function createWorkout(type, title, duration, description, date) {
+export async function createWorkout(type, title, duration, description, date) {
     console.log(type);
     console.log(title);
     console.log(description);
@@ -153,23 +176,92 @@ export function createWorkout(type, title, duration, description, date) {
     var id = generateWorkoutId(date);
 
     // console.log(data[mon][day])
-    console.log(id);
+    console.log(data);
+
+    // First item added to week in JSON.
+    if (!data.hasOwnProperty(mon)) {
+        data[mon] = {};
+    }
+
+    // First item added to day in JSON
+    if (!data[mon].hasOwnProperty(day)){
+        data[mon][day] = [];
+    }
+
     data[mon][day].push({
-        "id": id,
-        "type": type,
-        "duration": duration,
+        "id": parseInt(id),
+        "type": type.toLowerCase(),
+        "duration": parseInt(duration),
         "title": title,
         "description": description
     })
 
+
     console.log(data[mon])
+
+    // POST /api/login
+    const res = await fetch('/api/data', {
+        method: 'POST',
+        headers: {
+          // Make sure backend knows we're sending JSON data!!
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      }).then(t => t.json())
+
+    console.log("CALLED HANDLER")
+    console.log(res.message)
 }
 
 /**
  * Deletes workout of ID id
  * @param {*} id of workout to delete
  */
-export function deleteWorkout(id) {
+export async function deleteWorkout(id) {
+    id = id + "";
+
+    // Get rid of the workout # and day value...
+    // Note, this does assume I'll do at most 10 workouts in one day
+    // ...I think that's a fairly reasonable assumption.
+    var indexWorkout = id.substring(id.length - 1);
+    var day = id.substring(id.length - 2, id.length - 1);
+    var datestr = id.substring(0, id.length - 2)
+    var year = datestr.substring(datestr.length - 2);
+    var monthday = datestr.substring(0, datestr.length - 2);
+    var dayofmonth = monthday.substring(monthday.length - 2);
+    var month = datestr.substring(0, monthday.length - 2);
+
+    // Integer vars
+    var dd = parseInt(dayofmonth);
+
+    // Get prev mon to find key in JSON obj data
+    var key = day;
+
+    var dateOfWorkout = new Date(month + "/" + dd + "/" + year);
+    var mon = dateToStr(dateOfWorkout);
+
+    console.log(dateOfWorkout);
+    console.log(mon);
+    console.log(key);
+    console.log(indexWorkout);
+
+    // Remove elemnt from array.
+    data[mon][key].splice(indexWorkout, 1);
+    console.log(data[mon][key])
+
+    // Send new data array
+    const res = await fetch('/api/data', {
+        method: 'POST',
+        headers: {
+            // Make sure backend knows we're sending JSON data!!
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+        }).then(t => t.json())
+
+    console.log("CALLED HANDLER")
+    console.log(res.message)
+    
 
 }
 
