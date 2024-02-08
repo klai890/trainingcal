@@ -239,8 +239,6 @@ export async function deleteWorkout(id) {
     // Remove elemnt from array.
     data[mon][key].splice(indexWorkout, 1);
 
-    console.log(data[mon][key])
-
     // Send new data array
     const res = await fetch('/api/data', {
         method: 'POST',
@@ -250,10 +248,6 @@ export async function deleteWorkout(id) {
         },
         body: JSON.stringify(data)
         }).then(t => t.json())
-
-    console.log("CALLED HANDLER")
-    console.log(res.message)
-    
 
 }
 

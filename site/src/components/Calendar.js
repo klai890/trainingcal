@@ -5,8 +5,6 @@ import {addDays, sortDates, getMondays, inDateArr, dateToStr, capitalize, prevMo
 import { useState, useRef, useEffect } from 'react';
 import EditWorkout from './EditWorkout';
 import AddWorkout from './AddWorkout';
-import Script from 'next/script'
-
 
 export default function Calendar(){
     
@@ -88,9 +86,6 @@ export default function Calendar(){
                     week.push(new Date(addDays(d, i)));
                 }
 
-                console.log(d)
-                console.log(workoutDates);
-                console.log(inDateArr(d, workoutDates))
                 // a. If date not in .JSON file: 
                 if (!inDateArr(d, workoutDates)) {
                     
@@ -103,7 +98,7 @@ export default function Calendar(){
                         <div class="week" key={d.getTime()} id={d.getTime()} ref={rf}>
                             {week.map( day => (
                                     // <Day date={day} workouts={[]} />
-                                    <div class="dayContainer">
+                                    <div class="dayContainer" id={day.getTime()} key={day.getTime()}>
                                         <div class="dayHeader">
                                             {day.getDate()}
                                         </div>
@@ -159,7 +154,6 @@ export default function Calendar(){
 
                                 return (
                                     <>
-                                        {/* <Day date={day} workouts={workouts[dayStr]} /> */}
                                         <div class="dayContainer" key={day.getTime()} id={day.getTime()}>
                                             <div class="dayHeader">
                                                 {day.getDate()}
