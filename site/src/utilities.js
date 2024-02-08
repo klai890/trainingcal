@@ -75,7 +75,7 @@ export function inDateArr(target, dateArr){
     target = new Date(target);
     for (var i = 0; i < dateArr.length; i++) {
         var d = new Date(dateArr[i]);
-        if (d.valueOf() === target.valueOf()) {
+        if (d.getTime() == target.getTime()) {
             return true;
         }
     }
@@ -120,7 +120,7 @@ export function numHours(mins){
  * @returns minutes remaining after hours accounted for
  */
 export function remainingMins(mins){
-    return  Math.floor(((mins / 60) % 1) * 60);
+    return  mins - numHours(mins)*60;
 }
 
 
@@ -166,17 +166,10 @@ function generateWorkoutId(date){
  * @param {*} date of workout
  */
 export async function createWorkout(type, title, duration, description, date) {
-    console.log(type);
-    console.log(title);
-    console.log(description);
-    
     // Corresponding Monday:
     var mon = dateToStr(prevMon(date));
     var day = date.getDay() + "";
     var id = generateWorkoutId(date);
-
-    // console.log(data[mon][day])
-    console.log(data);
 
     // First item added to week in JSON.
     if (!data.hasOwnProperty(mon)) {
@@ -195,9 +188,6 @@ export async function createWorkout(type, title, duration, description, date) {
         "title": title,
         "description": description
     })
-
-
-    console.log(data[mon])
 
     // POST /api/login
     const res = await fetch('/api/data', {
@@ -239,11 +229,6 @@ export async function deleteWorkout(id) {
 
     var dateOfWorkout = new Date(month + "/" + dd + "/" + year);
     var mon = dateToStr(dateOfWorkout);
-
-    console.log(dateOfWorkout);
-    console.log(mon);
-    console.log(key);
-    console.log(indexWorkout);
 
     // Remove elemnt from array.
     data[mon][key].splice(indexWorkout, 1);

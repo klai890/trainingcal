@@ -27,14 +27,32 @@ body {
 }
 
 #main {
-  padding:0.8rem;
+
   background-color: none;
+}
+
+#header {
+  position: fixed;
+  background: white;
+  padding: 1rem;
 }
 
 #weekHeader{
   display: grid;
-  width: 100%;
+  width: 100vw;
   grid-template-columns: repeat(7, 12.14%) 15%;
+}
+
+#todayBtn {
+  display: inline;
+  margin-left: 1rem;
+  margin-bottom: .2rem;
+  background: #eee;
+  padding: 0 .5rem;
+}
+
+#todayBtn:hover{
+  background: #ddd;
 }
 
 .dayName {
@@ -47,6 +65,7 @@ body {
 .week {
   display: grid;
   grid-template-columns: repeat(7, 12.14%) 15%;
+  padding-top: 5rem;
 }
 
 .dayContainer {

@@ -1,13 +1,20 @@
 "use client";
 import data from '../../../data/data2.json'
 import Summary from './Summary'
-import {addDays, sortDates, getMondays, inDateArr, dateToStr, capitalize} from '@/utilities'
-import { useState } from 'react';
+import {addDays, sortDates, getMondays, inDateArr, dateToStr, capitalize, prevMon} from '@/utilities'
+import { useState, useRef, useEffect } from 'react';
 import EditWorkout from './EditWorkout';
 import AddWorkout from './AddWorkout';
+import Script from 'next/script'
 
 
 export default function Calendar(){
+    
+    // useState to see when to render popup for editing workout, adding workout
+    const [workoutId, setWorkoutId] = useState(-1);
+    const [workout, setWorkout] = useState();
+    const [addWorkout, setAddWorkout] = useState(false);
+    const [date, setDate] = useState(new Date());
     
     // 2. Collect all dates into an array and determine which is the earliest date. Store into earliestDate.
     var dateStrings = Object.keys(data);
@@ -19,17 +26,25 @@ export default function Calendar(){
     var endDate = new Date(addDays(new Date(), 70));
     var mondays = getMondays(endDate, earliestDate);
     
-    // useState to see when to render popup for editing workout, adding workout
-    const [workoutId, setWorkoutId] = useState(-1);
-    const [workout, setWorkout] = useState();
-    const [addWorkout, setAddWorkout] = useState(false);
-    const [date, setDate] = useState(new Date());
+    // Scroll to Today's Date
+    const [today, setToday] = useState(prevMon(new Date()));
+    const weekRef = useRef();
+    useEffect(() => {
+        console.log(weekRef);
+        scrollToToday();
+    })
 
+    function scrollToToday() {
+        weekRef.current.scrollIntoView();
+    }
+   
     return (
         <>
         <div id="main">
+
             <div id="header">
-                February 2024
+                {today.getMonth() + 1} / {today.getFullYear()}
+                <button id="todayBtn" onClick={() => scrollToToday()} >Today</button>
                 <div id="weekHeader">
                     <div class="dayName dayWidth">MON</div>
                     <div class="dayName dayWidth">TUE</div>
@@ -72,15 +87,19 @@ export default function Calendar(){
                     week.push(new Date(addDays(d, i)));
                 }
 
-
+                console.log(d)
+                console.log(workoutDates);
+                console.log(inDateArr(d, workoutDates))
                 // a. If date not in .JSON file: 
-                
                 if (!inDateArr(d, workoutDates)) {
                     
                     // For each day, generate a Day component with date=d and workouts=[]
                     // Then, generate Summary component, with totalTime = 0, bikeTime = 0, runTime = 0, swimTime = 0, otherTime = 0
+
+                    var rf = dateToStr(d) == dateToStr(today) ? weekRef : null;
+
                     return (
-                        <div class="week">
+                        <div class="week" key={d.getTime()} id={d.getTime()} ref={rf}>
                             {week.map( day => (
                                     // <Day date={day} workouts={[]} />
                                     <div class="dayContainer">
@@ -129,8 +148,10 @@ export default function Calendar(){
                         }
                     }
 
+                    var rf = dateToStr(d) == dateToStr(today) ? weekRef : null;
+
                     return(
-                        <div class="week">
+                        <div class="week" key={d.getTime()} id={d.getTime()} ref={rf}>
                             {week.map( day => {
                                 var dayStr = JSON.stringify(day.getDay());
                                 var dayWorkouts = workouts[dayStr];
@@ -138,7 +159,7 @@ export default function Calendar(){
                                 return (
                                     <>
                                         {/* <Day date={day} workouts={workouts[dayStr]} /> */}
-                                        <div class="dayContainer" key={day.getUTCMilliseconds()}>
+                                        <div class="dayContainer" key={day.getTime()} id={day.getTime()}>
                                             <div class="dayHeader">
                                                 {day.getDate()}
                                             </div>

@@ -1,17 +1,19 @@
 import {numHours, remainingMins} from '../utilities';
 
+function formatTime(duration){
+    
+    var hours = numHours(duration);
+    var mins = remainingMins(duration);
+    var prepend = ""
+
+    if (mins < 10) {
+        prepend = "0"
+    }
+    return hours + ":" + prepend + mins;
+}
+
 export default function Summary(workouts){
 
-    function formatTime(duration){
-        var hours = numHours(duration);
-        var mins = remainingMins(duration);
-        var prepend = ""
-
-        if (mins < 10) {
-            prepend = "0"
-        }
-        return hours + ":" + prepend + mins;
-    }
 
     // 1. Calculate total durations by type of workout
     workouts = workouts['workouts']
