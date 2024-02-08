@@ -30,12 +30,13 @@ export default function Calendar(){
     const [today, setToday] = useState(prevMon(new Date()));
     const weekRef = useRef();
     useEffect(() => {
-        console.log(weekRef);
         scrollToToday();
     })
 
     function scrollToToday() {
-        weekRef.current.scrollIntoView();
+        if (weekRef.current != null){
+            weekRef.current.scrollIntoView();
+        }
     }
    
     return (

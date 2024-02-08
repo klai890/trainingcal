@@ -134,7 +134,8 @@ body {
 }
 
 #editWorkout{
-  height: 700px;
+  height: 680px;
+  bottom: 20px;
   width: 600px;
   border: 1px solid black;
   position: fixed;
