@@ -156,9 +156,7 @@ export default function Calendar(){
                             {week.map( day => {
                                 var dayStr = JSON.stringify(day.getDay());
                                 var dayWorkouts = workouts[dayStr];
-                                console.log("-----------DAYWORKOUTS -----------------")
-                                console.log(dayWorkouts);
-
+                                
                                 return (
                                     <>
                                         {/* <Day date={day} workouts={workouts[dayStr]} /> */}

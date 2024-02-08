@@ -19,8 +19,14 @@ export default function EditWorkout({workout}) {
             <textarea class="modifyDescription" defaultValue={workout.description} onChange={(e) => setDescription(e.target.value)} />
 
             <div id="btnContainer">
-                <button class="deleteBtn" onClick={()=>{deleteWorkout(workout.id)}}>Delete</button>
-                <button class="saveBtn" onClick={() => {modifyWorkout(title, workout.type, duration, description, workout.id)}}>Save and Close</button>
+                <button class="deleteBtn" onClick={()=>{
+                    deleteWorkout(workout.id)
+                    alert("Successfully deleted workout")
+                    }}>Delete</button>
+                <button class="saveBtn" onClick={() => {
+                    modifyWorkout(title, workout.type, duration, description, workout.id)
+                    alert("Successfully modified workout")
+                    }}>Save and Close</button>
             </div>
         </>
     )

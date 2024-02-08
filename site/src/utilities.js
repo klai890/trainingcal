@@ -199,8 +199,6 @@ export async function createWorkout(type, title, duration, description, date) {
         body: JSON.stringify(data)
       }).then(t => t.json())
 
-    console.log("CALLED HANDLER")
-    console.log(res.message)
 }
 
 /**
