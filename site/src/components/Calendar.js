@@ -1,5 +1,5 @@
 "use client";
-import data from '../../../data/data2.json'
+import data from '../../../data/data.json'
 import Summary from './Summary'
 import {addDays, sortDates, getMondays, inDateArr, dateToStr, capitalize, prevMon} from '@/utilities'
 import { useState, useRef, useEffect } from 'react';
@@ -156,7 +156,7 @@ export default function Calendar(){
                             {week.map( day => {
                                 var dayStr = JSON.stringify(day.getDay());
                                 var dayWorkouts = workouts[dayStr];
-                                
+
                                 return (
                                     <>
                                         {/* <Day date={day} workouts={workouts[dayStr]} /> */}

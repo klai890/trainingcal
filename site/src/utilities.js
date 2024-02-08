@@ -1,5 +1,5 @@
 // A file containing some useful helper functions.
-import data from '../../data/data2.json'
+import data from '../../data/data.json'
 // export const workoutTypes = ['run', 'ride', 'swim', 'strength', 'other'];
 
 
