@@ -10,17 +10,17 @@ export default function EditWorkout({workout}) {
 
     return (
         <>
-            <input class="workoutTitleInput" value={workout.title} onChange={(e)=> setTitle(e.target.value)} />
+            <input class="workoutTitleInput" defaultValue={workout.title} onChange={(e)=> setTitle(e.target.value)} />
             <div>{capitalize(workout.type)}</div>
-            <b>Duration</b> (minutes): <input value={workout.duration} onChange={(e) => setDuration(e.target.value)} />
+            <b>Duration</b> (minutes): <input type="number" defaultValue={workout.duration} onChange={(e) => setDuration(e.target.value)} />
             
             <br />
             <b>Description:</b>
-            <textarea class="modifyDescription" value={workout.description} onChange={(e) => setDescription(e.target.value)} />
+            <textarea class="modifyDescription" defaultValue={workout.description} onChange={(e) => setDescription(e.target.value)} />
 
             <div id="btnContainer">
                 <button class="deleteBtn" onClick={()=>{deleteWorkout(workout.id)}}>Delete</button>
-                <button class="saveBtn" onClick={() => {modifyWorkout(title, duration, description, workout.id)}}>Save and Close</button>
+                <button class="saveBtn" onClick={() => {modifyWorkout(title, workout.type, duration, description, workout.id)}}>Save and Close</button>
             </div>
         </>
     )

@@ -230,8 +230,17 @@ export async function deleteWorkout(id) {
     var dateOfWorkout = new Date(month + "/" + dd + "/" + year);
     var mon = dateToStr(dateOfWorkout);
 
+    // Note, index workout might not be accurate to the database bc some might've been removed.
+
+    for (var i = 0; i < data[mon][key].length; i++){
+        if (data[mon][key][i].id == id) {
+            indexWorkout = i;
+        }
+    }
+
     // Remove elemnt from array.
     data[mon][key].splice(indexWorkout, 1);
+
     console.log(data[mon][key])
 
     // Send new data array
@@ -257,6 +266,50 @@ export async function deleteWorkout(id) {
  * @param {*} description (maybe new description)
  * @param {*} id of workout
  */
-export function modifyWorkout(title, duration, description, id){
+export async function modifyWorkout(title, type, duration, description, id){
+    id = id + "";
 
+    // Get rid of the workout # and day value...
+    // Note, this does assume I'll do at most 10 workouts in one day
+    // ...I think that's a fairly reasonable assumption.
+    var indexWorkout = id.substring(id.length - 1);
+    var day = id.substring(id.length - 2, id.length - 1);
+    var datestr = id.substring(0, id.length - 2)
+    var year = datestr.substring(datestr.length - 2);
+    var monthday = datestr.substring(0, datestr.length - 2);
+    var dayofmonth = monthday.substring(monthday.length - 2);
+    var month = datestr.substring(0, monthday.length - 2);
+
+    // Integer vars
+    var dd = parseInt(dayofmonth);
+
+    // Get prev mon to find key in JSON obj data
+    var key = day;
+
+    var dateOfWorkout = new Date(month + "/" + dd + "/" + year);
+    var mon = dateToStr(dateOfWorkout);
+
+    // Find element in array and modify it.
+    for (var i = 0; i < data[mon][key].length; i++) {
+        var elem = data[mon][key][i];
+        if (elem.id == parseInt(id) ){
+             data[mon][key][i]= {
+                "id": parseInt(id),
+                "type": type.toLowerCase(),
+                "duration": parseInt(duration),
+                "title": title,
+                "description": description
+            }
+        }
+    }
+
+    // Send new data array
+    const res = await fetch('/api/data', {
+        method: 'POST',
+        headers: {
+            // Make sure backend knows we're sending JSON data!!
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+        }).then(t => t.json())
 }
