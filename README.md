@@ -21,5 +21,9 @@ A local, subpar imitation of TrianingPeaks. Very simple, runs off of a local JSO
    yarn install
    yarn run dev
    ```
-   
+6.  Copy the absolute path to `/data/data.json`. Then, create `site/.env.local`, and add environment variable `DATA_PATH`, as shown below:
+    ```
+    DATA_PATH=absolute_path_of_data.json  
+    ```
+
 Good to go!

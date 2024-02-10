@@ -7,13 +7,14 @@ import EditWorkout from './EditWorkout';
 import AddWorkout from './AddWorkout';
 
 export default function Calendar(){
-    
+
     // useState to see when to render popup for editing workout, adding workout
     const [workoutId, setWorkoutId] = useState(-1);
     const [workout, setWorkout] = useState();
     const [addWorkout, setAddWorkout] = useState(false);
     const [date, setDate] = useState(new Date());
-    
+    const numWeeks = 20;
+
     // 2. Collect all dates into an array and determine which is the earliest date. Store into earliestDate.
     var dateStrings = Object.keys(data);
     var workoutDates = dateStrings.map( dateString => new Date(dateString));
@@ -21,15 +22,19 @@ export default function Calendar(){
     var earliestDate = new Date(workoutDates[0]);
 
     // 3. Generate an array of Dates, mondays, which span from earliestDate to 10 weeks from today's date
-    var endDate = new Date(addDays(new Date(), 70));
+    var endDate = new Date(addDays(new Date(), numWeeks * 7));
     var mondays = getMondays(endDate, earliestDate);
     
     // Scroll to Today's Date
     const [today, setToday] = useState(prevMon(new Date()));
     const weekRef = useRef();
+    const [selectedDay, setSelectedDay] = useState(new Date());
+	
+    // Note: [] as a callback forces useEffect() to only run once.
+    // To scrollToToday() after the first and only run thru useEffect, click the today button. 
     useEffect(() => {
         scrollToToday();
-    })
+    }, [])
 
     function scrollToToday() {
         if (weekRef.current != null){
@@ -42,7 +47,7 @@ export default function Calendar(){
         <div id="main">
 
             <div id="header">
-                {today.getMonth() + 1} / {today.getFullYear()}
+	    	{selectedDay.getMonth() + 1} / {selectedDay.getFullYear()}
                 <button id="todayBtn" onClick={() => scrollToToday()} >Today</button>
                 <div id="weekHeader">
                     <div class="dayName dayWidth">MON</div>
@@ -97,8 +102,7 @@ export default function Calendar(){
                     return (
                         <div class="week" key={d.getTime()} id={d.getTime()} ref={rf}>
                             {week.map( day => (
-                                    // <Day date={day} workouts={[]} />
-                                    <div class="dayContainer" id={day.getTime()} key={day.getTime()}>
+                                    <div class="dayContainer" id={day.getTime()} key={day.getTime()} onClick={() => setSelectedDay(day)}>
                                         <div class="dayHeader">
                                             {day.getDate()}
                                         </div>
@@ -154,7 +158,7 @@ export default function Calendar(){
 
                                 return (
                                     <>
-                                        <div class="dayContainer" key={day.getTime()} id={day.getTime()}>
+                                        <div class="dayContainer" key={day.getTime()} id={day.getTime()} onClick={() => {setSelectedDay(day)}} >
                                             <div class="dayHeader">
                                                 {day.getDate()}
                                             </div>
