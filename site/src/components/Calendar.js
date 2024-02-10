@@ -25,18 +25,14 @@ export default function Calendar(){
     var endDate = new Date(addDays(new Date(), numWeeks * 7));
     var mondays = getMondays(endDate, earliestDate);
     
-    // Scroll to Today's Date
-    const [today, setToday] = useState(prevMon(new Date()));
     const weekRef = useRef();
-    const [selectedDay, setSelectedDay] = useState(new Date());
+    const [selectedDay, setSelectedDay] = useState(prevMon(new Date()));
 	
-    // Note: [] as a callback forces useEffect() to only run once.
-    // To scrollToToday() after the first and only run thru useEffect, click the today button. 
     useEffect(() => {
-        scrollToToday();
-    }, [])
+        scrollToSelectedDay();
+    })
 
-    function scrollToToday() {
+    function scrollToSelectedDay() {
         if (weekRef.current != null){
             weekRef.current.scrollIntoView();
         }
@@ -48,7 +44,7 @@ export default function Calendar(){
 
             <div id="header">
 	    	{selectedDay.getMonth() + 1} / {selectedDay.getFullYear()}
-                <button id="todayBtn" onClick={() => scrollToToday()} >Today</button>
+                <button id="todayBtn" onClick={() => {setSelectedDay(prevMon(new Date())); scrollToSelectedDay()}} >Today</button>
                 <div id="weekHeader">
                     <div class="dayName dayWidth">MON</div>
                     <div class="dayName dayWidth">TUE</div>
@@ -97,12 +93,12 @@ export default function Calendar(){
                     // For each day, generate a Day component with date=d and workouts=[]
                     // Then, generate Summary component, with totalTime = 0, bikeTime = 0, runTime = 0, swimTime = 0, otherTime = 0
 
-                    var rf = dateToStr(d) == dateToStr(today) ? weekRef : null;
+                    var rf = dateToStr(d) == dateToStr(selectedDay) ? weekRef : null;
 
                     return (
                         <div class="week" key={d.getTime()} id={d.getTime()} ref={rf}>
                             {week.map( day => (
-                                    <div class="dayContainer" id={day.getTime()} key={day.getTime()} onClick={() => setSelectedDay(day)}>
+                                    <div class="dayContainer" id={day.getTime()} key={day.getTime()} onClick={() => setSelectedDay(d)}>
                                         <div class="dayHeader">
                                             {day.getDate()}
                                         </div>
@@ -148,7 +144,7 @@ export default function Calendar(){
                         }
                     }
 
-                    var rf = dateToStr(d) == dateToStr(today) ? weekRef : null;
+                    var rf = dateToStr(d) == dateToStr(selectedDay) ? weekRef : null;
 
                     return(
                         <div class="week" key={d.getTime()} id={d.getTime()} ref={rf}>
@@ -158,7 +154,7 @@ export default function Calendar(){
 
                                 return (
                                     <>
-                                        <div class="dayContainer" key={day.getTime()} id={day.getTime()} onClick={() => {setSelectedDay(day)}} >
+                                        <div class="dayContainer" key={day.getTime()} id={day.getTime()} onClick={() => {setSelectedDay(d)}} >
                                             <div class="dayHeader">
                                                 {day.getDate()}
                                             </div>
