@@ -25,7 +25,7 @@ export default function AddWorkout({date}) {
             <b>Duration</b> (minutes): <input placeholder="30" onChange={(e) => setDuration(e.target.value)}/>
             <textarea class="modifyDescription" placeholder="Workout description" onChange={e => setDescription(e.target.value)} />
             <div id="btnContainer">
-                <button class="saveBtn" onClick={() => {createWorkout(document.getElementById('workoutTypeSelector').value, title, duration, description, date)}}>Save and Close</button>
+                <button class="saveBtn" onClick={() => {createWorkout(document.getElementById('workoutTypeSelector').value, title, duration, description, date); alert("Workout successfully added");}}>Save and Close</button>
             </div>
         </>
     )
