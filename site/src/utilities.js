@@ -142,8 +142,8 @@ function generateWorkoutId(date){
     var day = date.getDay() + "";
     var workoutNum;
 
-    if (date.hasOwnProperty(dateToStr(mon))){
-        if (date[mon].hasOwnProperty(day)) {
+    if (data.hasOwnProperty(dateToStr(mon))){
+        if (data[dateToStr(mon)].hasOwnProperty(day)) {
             workoutNum = data[dateToStr(mon)][day].length;
         }
         else {
